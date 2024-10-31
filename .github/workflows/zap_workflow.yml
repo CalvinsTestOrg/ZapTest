@@ -16,6 +16,8 @@ jobs:
 
       - name: Pull and Run Eureka
         run: |
+          mkdir zaphome
+          ls -al
           docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
           docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
           docker run --rm --network host \
@@ -27,6 +29,7 @@ jobs:
           -e EUREKA_PASSWORD=${{ secrets.EUREKA_PASSWORD }} \
           -e PROFILE_INFO=$PROFILE_INFO \
           $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
+          ls -al
         env:
           EUREKA_REGISTRY_URL: "fwdsecuritystaging.azurecr.io"
           EUREKA_REPO: "fwdsec/eureka"
