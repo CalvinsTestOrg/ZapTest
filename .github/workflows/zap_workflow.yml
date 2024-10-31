@@ -35,5 +35,6 @@ jobs:
           EUREKA_TAG: "latest"
           PROFILE_INFO: "systemID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;componentID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;profileID=c96397c2-2d2f-4c5e-beee-cee0b851cab8"
       - name: List directories post-run
+        if: success() || failure()
         run: |
           ls -al
