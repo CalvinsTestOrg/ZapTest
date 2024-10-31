@@ -28,10 +28,12 @@ jobs:
           -e EUREKA_USER=${{ secrets.EUREKA_USER }} \
           -e EUREKA_PASSWORD=${{ secrets.EUREKA_PASSWORD }} \
           -e PROFILE_INFO=$PROFILE_INFO \
-          $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
-          ls -al
+          $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG; ls -al
         env:
           EUREKA_REGISTRY_URL: "fwdsecuritystaging.azurecr.io"
           EUREKA_REPO: "fwdsec/eureka"
           EUREKA_TAG: "latest"
           PROFILE_INFO: "systemID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;componentID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;profileID=c96397c2-2d2f-4c5e-beee-cee0b851cab8"
+      - name: List directories post-run
+        run: |
+          ls -al
