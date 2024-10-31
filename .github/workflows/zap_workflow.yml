@@ -16,9 +16,8 @@ jobs:
 
       - name: Pull and Run Eureka
         run: |
-          useradd -u 1002 -g $(id -g) zap
           mkdir zaphome
-          chmod 664 zaphome
+          chmod 666 zaphome
           ls -al
           id
           echo $(id -u):$(id -g)
