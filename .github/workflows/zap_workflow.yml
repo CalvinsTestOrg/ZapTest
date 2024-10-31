@@ -18,9 +18,11 @@ jobs:
         run: |
           mkdir zaphome
           ls -al
+          id
+          echo $(id -u):$(id -g)
           docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
           docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
-          docker run --rm --network host \
+          docker run --rm --user $(id -u):$(id -g) --network host \
           -v /var/run/docker.sock:/var/run/docker.sock \
           -v "$(pwd)":/home/repo \
           -e DIND_USER_HOME="$(pwd)" \
