@@ -17,10 +17,9 @@ jobs:
       - name: Pull and Run Eureka
         run: |
           mkdir zaphome
-          chmod 666 zaphome
+          chown -R 1000:$(id -g) .
+          chmod -R 666 .
           ls -al
-          id
-          echo $(id -u):$(id -g)
           docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
           docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
           docker run --user 1000:1000 --rm --network host \
