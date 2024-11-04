@@ -19,10 +19,10 @@ jobs:
           mkdir zaphome
           sudo chown -R 1000:$(id -g) .
           sudo chmod -R 666 .
-          ls -al
-          docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
-          docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
-          docker run --user 1000:1000 --rm --network host \
+          sudo ls -al
+          sudo docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
+          sudo docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
+          sudo docker run --user 1000:1000 --rm --network host \
           -v /var/run/docker.sock:/var/run/docker.sock \
           -v "$(pwd)":/home/repo \
           -e DIND_USER_HOME="$(pwd)" \
@@ -39,4 +39,4 @@ jobs:
       - name: List directories post-run
         if: success() || failure()
         run: |
-          ls -al
+          sudo ls -al
