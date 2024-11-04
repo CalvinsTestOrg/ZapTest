@@ -16,8 +16,8 @@ jobs:
 
       - name: Pull and Run Eureka
         run: |
-          groupadd -g 1000 zap
-          useradd -u 1000 -g zap zap
+          # groupadd -g 1000 zap
+          useradd -u 1000 -g 1000 zap
           mkdir zaphome
           chown -R 1000:1000 zaphome
           chmod o+rwx .
