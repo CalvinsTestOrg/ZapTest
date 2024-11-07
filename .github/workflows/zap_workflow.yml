@@ -1,47 +1,44 @@
-name: Eureka Scanning
-
-# Controls when the action will run.
+name: Run ZAP
 on:
   push:
     branches:
         - '*'
-
 jobs:
-  eureka-scan:
-    runs-on: ubuntu-latest
-    name: scan
+  run_zap:
+    if: always()
+    name: Run Zap via Eureka Managed
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 120
     steps:
-      - name: Checkout GitHub Action
-        uses: actions/checkout@v3
-
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Pull and Run Eureka
-        run: |
-          # groupadd -g 1000 zap
-          # sudo useradd -u 1000 -g 1000 zap
-          mkdir zaphome
-          sudo chown -R 1000:1000 zaphome
-          chmod o+rwx .
-          docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
-          docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
-          docker run --rm --network host \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          -v "$(pwd)":/home/repo \
-          -e DIND_USER_HOME="$(pwd)" \
-          -e EUREKA_ENDPOINT="${{ secrets.EUREKA_ENDPOINT }}" \
-          -e EUREKA_USER=${{ secrets.EUREKA_USER }} \
-          -e EUREKA_PASSWORD=${{ secrets.EUREKA_PASSWORD }} \
-          -e DAST_USERNAME=${{ secrets.DAST_USERNAME }} \
-          -e DAST_PASSWORD="${{ secrets.DAST_PASSWORD }}" \
-          -e PROFILE_INFO=$PROFILE_INFO \
-          -e TARGET_HOST=$TARGET_HOST \
-          $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG; ls -al
+        shell: bash
         env:
           EUREKA_REGISTRY_URL: "fwdsecuritystaging.azurecr.io"
           EUREKA_REPO: "fwdsec/eureka"
           EUREKA_TAG: "latest"
           TARGET_HOST: "http://zyx-juice-shop.canadaeast.azurecontainer.io:3000"
           PROFILE_INFO: "systemID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;componentID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;profileID=c96397c2-2d2f-4c5e-beee-cee0b851cab8"
-      - name: List directories post-run
-        if: success() || failure()
         run: |
-          ls -al
+          echo "RUNNING macabacus-api ZAP SCAN..."
+          echo "PWD: $(pwd)"
+          # Setup for Zap
+          mkdir zaphome
+          sudo chown -R 1000:1000 zaphome
+          # Run Eureka
+          chmod o+rwx .
+          docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS $EUREKA_REGISTRY_URL
+          docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
+          docker run --rm --network host \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          -v "$(pwd)":/home/repo \
+          -e DIND_USER_HOME="$(pwd)" \
+          -e EUREKA_ENDPOINT=$EUREKA_ENDPOINT \
+          -e EUREKA_USER=$DOCKERHUB_USER \
+          -e EUREKA_PASSWORD=$DOCKERHUB_PASS \
+          -e DAST_USERNAME=$DAST_USERNAME \
+          -e DAST_PASSWORD=$DAST_PASSWORD \
+          $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
