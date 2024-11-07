@@ -39,6 +39,6 @@ jobs:
           -e EUREKA_ENDPOINT=$EUREKA_ENDPOINT \
           -e EUREKA_USER="${{ secrets.EUREKA_USER }}" \
           -e EUREKA_PASSWORD="${{ secrets.EUREKA_PASSWORD }}" \
-          -e DAST_USERNAME=${{ secrets.DAST_USERNAME }} \
-          -e DAST_PASSWORD=${{ secrets.DAST_PASSWORD }} \
+          -e DAST_USERNAME="${{ secrets.DAST_USERNAME }}" \
+          -e DAST_PASSWORD="${{ secrets.DAST_PASSWORD }}" \
           $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
