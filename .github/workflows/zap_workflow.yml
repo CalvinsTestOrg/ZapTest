@@ -36,7 +36,7 @@ jobs:
           -v /var/run/docker.sock:/var/run/docker.sock \
           -v "$(pwd)":/home/repo \
           -e DIND_USER_HOME="$(pwd)" \
-          -e EUREKA_ENDPOINT=$EUREKA_ENDPOINT \
+          -e EUREKA_ENDPOINT="${{ secrets.EUREKA_ENDPOINT }}" \
           -e EUREKA_USER="${{ secrets.EUREKA_USER }}" \
           -e EUREKA_PASSWORD="${{ secrets.EUREKA_PASSWORD }}" \
           -e DAST_USERNAME="${{ secrets.DAST_USERNAME }}" \
