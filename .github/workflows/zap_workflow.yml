@@ -35,12 +35,6 @@ jobs:
           -e PROFILE_INFO=$PROFILE_INFO \
           -e TARGET_HOST=$TARGET_HOST \
           $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG; ls -al
-        env:
-          EUREKA_REGISTRY_URL: "fwdsecuritystaging.azurecr.io"
-          EUREKA_REPO: "fwdsec/eureka"
-          EUREKA_TAG: "latest"
-          TARGET_HOST: "http://zyx-juice-shop.canadaeast.azurecontainer.io:3000"
-          PROFILE_INFO: "systemID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;componentID=b6d5fb23-c21f-432f-90c0-d9049678b6b4;profileID=c96397c2-2d2f-4c5e-beee-cee0b851cab8"
       - name: List directories post-run
         if: success() || failure()
         run: |
