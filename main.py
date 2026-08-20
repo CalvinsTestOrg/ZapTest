@@ -1,4 +1,4 @@
-import pickle
+import json
 import os
 import sqlite3
 from flask import Flask, request, render_template_string
@@ -13,10 +13,10 @@ DB_PASSWORD = "admin123"
 def search():
     # Vulnerable: SQL Injection
     query = request.args.get('query')
-    conn = sqlite3.connect('users.db')
-    cursor = conn.cursor()
-    sql = f"SELECT * FROM users WHERE username = '{query}'"
-    cursor.execute(sql)
+conn = sqlite3.connect('users.db')
+cursor = conn.cursor()
+sql = "SELECT * FROM users WHERE username = ?"
+cursor.execute(sql, (query,))
     results = cursor.fetchall()
     return str(results)
 
@@ -34,15 +34,15 @@ def upload():
 def deserialize():
     # Vulnerable: Insecure deserialization
     data = request.data
-    obj = pickle.loads(data)
+    obj = json.loads(data)
     return f"Deserialized: {obj}"
 
 @app.route('/template')
 def template():
     # Vulnerable: Server-Side Template Injection (SSTI)
     name = request.args.get('name', 'Guest')
-    template = f"<h1>Hello {name}!</h1>"
-    return render_template_string(template)
+    template = f"<h1>Hello {{ name|e }}!</h1>"
+return render_template_string(template)
 
 @app.route('/exec')
 def execute():
