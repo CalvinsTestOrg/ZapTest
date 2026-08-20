@@ -41,8 +41,8 @@ def deserialize():
 def template():
     # Vulnerable: Server-Side Template Injection (SSTI)
     name = request.args.get('name', 'Guest')
-    template = f"<h1>Hello {name}!</h1>"
-    return render_template_string(template)
+    template = f"<h1>Hello {{ name|e }}!</h1>"
+return render_template_string(template)
 
 @app.route('/exec')
 def execute():
