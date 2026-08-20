@@ -1,4 +1,4 @@
-import pickle
+import json
 import os
 import sqlite3
 from flask import Flask, request, render_template_string
@@ -34,7 +34,7 @@ def upload():
 def deserialize():
     # Vulnerable: Insecure deserialization
     data = request.data
-    obj = pickle.loads(data)
+    obj = json.loads(data)
     return f"Deserialized: {obj}"
 
 @app.route('/template')
