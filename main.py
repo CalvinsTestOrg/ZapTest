@@ -2,6 +2,7 @@ import pickle
 import os
 import sqlite3
 from flask import Flask, request, render_template_string
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -28,7 +29,7 @@ def upload():
     # Vulnerable: Path traversal
     filepath = os.path.join('/uploads/', filename)
     file.save(filepath)
-    return f"File saved to {filepath}"
+    return "File saved to " + escape(filepath)
 
 @app.route('/deserialize', methods=['POST'])
 def deserialize():
