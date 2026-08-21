@@ -15,8 +15,8 @@ def search():
     query = request.args.get('query')
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
-    sql = f"SELECT * FROM users WHERE username = '{query}'"
-    cursor.execute(sql)
+    sql = "SELECT * FROM users WHERE username = ?"
+    cursor.execute(sql, (query,))
     results = cursor.fetchall()
     return str(results)
 
@@ -34,7 +34,7 @@ def upload():
 def deserialize():
     # Vulnerable: Insecure deserialization
     data = request.data
-    obj = pickle.loads(data)
+    obj = obj = json.loads(data)
     return f"Deserialized: {obj}"
 
 @app.route('/template')
