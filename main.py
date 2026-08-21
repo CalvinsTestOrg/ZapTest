@@ -15,8 +15,8 @@ def search():
     query = request.args.get('query')
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
-    sql = f"SELECT * FROM users WHERE username = '{query}'"
-    cursor.execute("SELECT * FROM table_name WHERE column_name = :value", {'value': user_input})
+    sql = "SELECT * FROM users WHERE username = ?"
+    cursor.execute(sql, (query,))
     results = cursor.fetchall()
     return str(results)
 
