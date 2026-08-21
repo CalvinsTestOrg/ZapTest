@@ -2,6 +2,7 @@ import pickle
 import os
 import sqlite3
 from flask import Flask, request, render_template_string
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -15,8 +16,8 @@ def search():
     query = request.args.get('query')
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
-    sql = f"SELECT * FROM users WHERE username = '{query}'"
-    cursor.execute(sql)
+    sql = sql = "SELECT * FROM users WHERE username = :username"
+    cursor.execute("SELECT * FROM table_name WHERE column_name = :value", {'value': user_input})
     results = cursor.fetchall()
     return str(results)
 
@@ -28,13 +29,13 @@ def upload():
     # Vulnerable: Path traversal
     filepath = os.path.join('/uploads/', filename)
     file.save(filepath)
-    return f"File saved to {filepath}"
+    return "File saved to " + escape(filepath)
 
 @app.route('/deserialize', methods=['POST'])
 def deserialize():
     # Vulnerable: Insecure deserialization
     data = request.data
-    obj = pickle.loads(data)
+    obj = obj = json.loads(data)
     return f"Deserialized: {obj}"
 
 @app.route('/template')
@@ -54,8 +55,10 @@ def execute():
 @app.route('/eval')
 def evaluate():
     # Vulnerable: Code Injection via eval
-    code = request.args.get('code')
-    result = eval(code)
+    # Replace eval with a safer alternative
+# For example, if you need to execute a specific function or command, define it explicitly instead of using eval.
+# result = safe_function(code)  # Define safe_function to handle the input securely
+
     return f"Result: {result}"
 
 # Vulnerable: Debug mode enabled in production
