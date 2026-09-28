@@ -1,47 +1,47 @@
-name: Eureka Scanning
+# name: Eureka Scanning
 
-# Controls when the action will run.
-on:
-  push:
-    branches:
-        - '*'
+# # Controls when the action will run.
+# on:
+#   push:
+#     branches:
+#         - '*'
 
-jobs:
-  eureka-scan:
-    runs-on: ubuntu-latest
-    name: scan
-    steps:
-      - name: Checkout GitHub Action
-        uses: actions/checkout@v3
+# jobs:
+#   eureka-scan:
+#     runs-on: ubuntu-latest
+#     name: scan
+#     steps:
+#       - name: Checkout GitHub Action
+#         uses: actions/checkout@v3
 
-      - name: Pull and Run Eureka
-        run: |
-          # groupadd -g 1000 zap
-          # sudo useradd -u 1000 -g 1000 zap
-          mkdir zaphome
-          sudo chown -R 1000:1000 zaphome
-          chmod o+rwx .
-          docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
-          docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
-          docker run --rm --network host \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          -v "$(pwd)":/home/repo \
-          -e DIND_USER_HOME="$(pwd)" \
-          -e EUREKA_ENDPOINT="${{ secrets.EUREKA_ENDPOINT }}" \
-          -e EUREKA_USER=${{ secrets.EUREKA_USER }} \
-          -e EUREKA_PASSWORD=${{ secrets.EUREKA_PASSWORD }} \
-          -e DAST_USERNAME=${{ secrets.DAST_USERNAME }} \
-          -e DAST_PASSWORD="${{ secrets.DAST_PASSWORD }}" \
-          -e PROFILE_INFO=$PROFILE_INFO \
-          -e TARGET_HOST=$TARGET_HOST \
-          $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG; ls -al
-        env:
-          EUREKA_REGISTRY_URL: "eurekahubprodagentacr.azurecr.io"
-          EUREKA_REPO: "fwdsec/eureka"
-          EUREKA_TAG: "latest"
-          TARGET_HOST: "http://zyx-juice-shop.canadaeast.azurecontainer.io:3000"
-          PROFILE_INFO: "systemID=576f312c-139d-4f25-9914-1c7361cef4b5;componentID=576f312c-139d-4f25-9914-1c7361cef4b5;profileID=576f312c-139d-4f25-9914-1c7361cef4b5"
-      - name: List directories post-run
-        if: success() || failure()
-        run: |
-          ls -al
+#       - name: Pull and Run Eureka
+#         run: |
+#           # groupadd -g 1000 zap
+#           # sudo useradd -u 1000 -g 1000 zap
+#           mkdir zaphome
+#           sudo chown -R 1000:1000 zaphome
+#           chmod o+rwx .
+#           docker login -u ${{ secrets.EUREKA_USER }} -p ${{ secrets.EUREKA_PASSWORD }} $EUREKA_REGISTRY_URL
+#           docker pull $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG
+#           docker run --rm --network host \
+#           -v /var/run/docker.sock:/var/run/docker.sock \
+#           -v "$(pwd)":/home/repo \
+#           -e DIND_USER_HOME="$(pwd)" \
+#           -e EUREKA_ENDPOINT="${{ secrets.EUREKA_ENDPOINT }}" \
+#           -e EUREKA_USER=${{ secrets.EUREKA_USER }} \
+#           -e EUREKA_PASSWORD=${{ secrets.EUREKA_PASSWORD }} \
+#           -e DAST_USERNAME=${{ secrets.DAST_USERNAME }} \
+#           -e DAST_PASSWORD="${{ secrets.DAST_PASSWORD }}" \
+#           -e PROFILE_INFO=$PROFILE_INFO \
+#           -e TARGET_HOST=$TARGET_HOST \
+#           $EUREKA_REGISTRY_URL/$EUREKA_REPO:$EUREKA_TAG; ls -al
+#         env:
+#           EUREKA_REGISTRY_URL: "eurekahubprodagentacr.azurecr.io"
+#           EUREKA_REPO: "fwdsec/eureka"
+#           EUREKA_TAG: "latest"
+#           TARGET_HOST: "http://zyx-juice-shop.canadaeast.azurecontainer.io:3000"
+#           PROFILE_INFO: "systemID=576f312c-139d-4f25-9914-1c7361cef4b5;componentID=576f312c-139d-4f25-9914-1c7361cef4b5;profileID=576f312c-139d-4f25-9914-1c7361cef4b5"
+#       - name: List directories post-run
+#         if: success() || failure()
+#         run: |
+#           ls -al
