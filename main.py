@@ -55,7 +55,9 @@ def execute():
 def evaluate():
     # Vulnerable: Code Injection via eval
     code = request.args.get('code')
-    result = eval(code)
+    result = # Avoid using eval for executing code; consider using safer alternatives like ast.literal_eval if applicable.
+# result = eval(code)  # Original vulnerable line
+result = ast.literal_eval(code)  # Use this if code is a valid Python literal
     return f"Result: {result}"
 
 # Vulnerable: Debug mode enabled in production
