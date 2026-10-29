@@ -1,6 +1,8 @@
 import pickle
 import os
+import shlex
 import sqlite3
+import subprocess
 from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
@@ -48,7 +50,7 @@ def template():
 def execute():
     # Vulnerable: Command Injection
     cmd = request.args.get('cmd')
-    result = os.system(cmd)
+    result = subprocess.run(shlex.split(cmd)).returncode
     return f"Command executed: {result}"
 
 @app.route('/eval')
