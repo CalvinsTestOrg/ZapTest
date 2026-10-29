@@ -34,7 +34,7 @@ def upload():
 def deserialize():
     # Vulnerable: Insecure deserialization
     data = request.data
-    obj = pickle.loads(data)
+    obj = obj = json.loads(data)
     return f"Deserialized: {obj}"
 
 @app.route('/template')
