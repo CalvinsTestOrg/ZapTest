@@ -48,7 +48,10 @@ def template():
 def execute():
     # Vulnerable: Command Injection
     cmd = request.args.get('cmd')
-    result = os.system(cmd)
+    result = import subprocess
+
+result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+
     return f"Command executed: {result}"
 
 @app.route('/eval')
