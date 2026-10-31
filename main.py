@@ -49,7 +49,7 @@ def execute():
     # Vulnerable: Command Injection
     cmd = request.args.get('cmd')
     result = os.system(cmd)
-    return f"Command executed: {result}"
+    return render_template('command_result.html', result=result)
 
 @app.route('/eval')
 def evaluate():
