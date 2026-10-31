@@ -28,7 +28,7 @@ def upload():
     # Vulnerable: Path traversal
     filepath = os.path.join('/uploads/', filename)
     file.save(filepath)
-    return f"File saved to {filepath}"
+    return f"File saved to {escape(filepath)}"
 
 @app.route('/deserialize', methods=['POST'])
 def deserialize():
