@@ -54,8 +54,15 @@ def execute():
 @app.route('/eval')
 def evaluate():
     # Vulnerable: Code Injection via eval
-    code = request.args.get('code')
-    result = eval(code)
+    # Avoid using eval for executing code from user input
+# Consider using a safer alternative or a predefined set of commands
+# For example, if you need to execute specific functions, use a mapping approach instead
+allowed_commands = {'command1': function1, 'command2': function2}
+code = request.args.get('code')
+if code in allowed_commands:
+    result = allowed_commands[code]()
+else:
+    raise ValueError('Invalid command')
     return f"Result: {result}"
 
 # Vulnerable: Debug mode enabled in production
