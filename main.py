@@ -13,10 +13,10 @@ DB_PASSWORD = "admin123"
 def search():
     # Vulnerable: SQL Injection
     query = request.args.get('query')
-    conn = sqlite3.connect('users.db')
-    cursor = conn.cursor()
-    sql = f"SELECT * FROM users WHERE username = '{query}'"
-    cursor.execute(sql)
+conn = sqlite3.connect('users.db')
+cursor = conn.cursor()
+sql = "SELECT * FROM users WHERE username = ?"
+cursor.execute(sql, (query,))
     results = cursor.fetchall()
     return str(results)
 
