@@ -16,7 +16,7 @@ def search():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
     sql = f"SELECT * FROM users WHERE username = '{query}'"
-    cursor.execute(sql)
+    cursor.execute("SELECT * FROM table_name WHERE column_name = :value", {'value': user_input})
     results = cursor.fetchall()
     return str(results)
 
@@ -54,8 +54,10 @@ def execute():
 @app.route('/eval')
 def evaluate():
     # Vulnerable: Code Injection via eval
-    code = request.args.get('code')
-    result = eval(code)
+    # Replace eval with a safer alternative
+# For example, if you need to execute a specific function or command, define it explicitly instead of using eval.
+# result = safe_function(code)  # Define safe_function to handle the input securely
+
     return f"Result: {result}"
 
 # Vulnerable: Debug mode enabled in production
