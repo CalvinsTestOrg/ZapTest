@@ -1,6 +1,7 @@
 import pickle
 import os
 import sqlite3
+import ast
 from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
@@ -55,7 +56,7 @@ def execute():
 def evaluate():
     # Vulnerable: Code Injection via eval
     code = request.args.get('code')
-    result = eval(code)
+    result = ast.literal_eval(code)
     return f"Result: {result}"
 
 # Vulnerable: Debug mode enabled in production
