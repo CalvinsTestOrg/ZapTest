@@ -16,7 +16,7 @@ def search():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
     sql = f"SELECT * FROM users WHERE username = '{query}'"
-    cursor.execute(sql)
+    cursor.execute("SELECT * FROM table_name WHERE column_name = :value", {'value': user_input})
     results = cursor.fetchall()
     return str(results)
 
@@ -41,7 +41,7 @@ def deserialize():
 def template():
     # Vulnerable: Server-Side Template Injection (SSTI)
     name = request.args.get('name', 'Guest')
-    template = f"<h1>Hello {name}!</h1>"
+    template = template = f"<h1>Hello {html.escape(name)}!</h1>"
     return render_template_string(template)
 
 @app.route('/exec')
