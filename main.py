@@ -56,7 +56,7 @@ def evaluate():
     # Vulnerable: Code Injection via eval
     code = request.args.get('code')
     result = eval(code)
-    return f"Result: {result}"
+    return render_template('result.html', result=result)
 
 # Vulnerable: Debug mode enabled in production
 if __name__ == '__main__':
